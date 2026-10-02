@@ -47,6 +47,8 @@
       // note that Apple dropped support for other animations in iOS 9.2 or 9.3 in favor of a slide-back gesture
       vc.modalTransitionStyle = [self getTransitionStyle:options[@"transition"]];
     }
+    // Keep the host view in the window while presented, so the web view's safe area insets are not reset on dismissal
+    vc.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self.viewController presentViewController:vc animated:self.animated completion:nil];
   }
 
