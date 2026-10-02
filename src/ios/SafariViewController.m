@@ -109,16 +109,15 @@
 }
 
 - (void) hide:(CDVInvokedUrlCommand*)command {
-  SFSafariViewController *childVc = [self.viewController.childViewControllers lastObject];
-  if (childVc != nil) {
-    [childVc willMoveToParentViewController:nil];
-    [childVc.view removeFromSuperview];
-    [childVc removeFromParentViewController];
-    childVc = nil;
-  }
-  
   if (vc != nil) {
-    [vc dismissViewControllerAnimated:self.animated completion:nil];
+    if (vc.parentViewController == self.viewController) {
+      // Shown with `hidden: true`, so it was added as a child view controller
+      [vc willMoveToParentViewController:nil];
+      [vc.view removeFromSuperview];
+      [vc removeFromParentViewController];
+    } else {
+      [vc dismissViewControllerAnimated:self.animated completion:nil];
+    }
     vc = nil;
   }
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
